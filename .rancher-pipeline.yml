@@ -1,5 +1,5 @@
 stages:
-- name: Codeception test
+- name: Code Estabil.is testing
   steps:
   - runScriptConfig:
       image: php:7.2
@@ -15,13 +15,30 @@ stages:
         php artisan migrate --env=testing --database=sqlite_testing --force
         ./vendor/bin/codecept build
         ./vendor/bin/codecept run
+
 - name: Publish image
   steps:
   - publishImageConfig:
-      dockerfilePath: ./Dockerfile
+      dockerfilePath: ./src/build/Dockerfile
       buildContext: .
-      tag: php-example:${CICD_EXECUTION_SEQUENCE}
-- name: Deploy
+      tag: ${CICD_IMAGE}:${CICD_EXECUTION_SEQUENCE}
+
+- name: Secrets
   steps:
   - applyYamlConfig:
-      path: ./deploy/deployment.yaml
+      path: ./src/kubernetes/secrets.yaml
+
+- name: ServiceAccount
+  steps:
+  - applyYamlConfig:
+      path: ./src/kubernetes/serviceaccount.yaml
+
+- name: Service
+  steps:
+  - applyYamlConfig:
+      path: ./src/kubernetes/service.yaml
+
+- name: StatefulSet
+  steps:
+  - applyYamlConfig:
+      path: ./src/kubernetes/statefulset.yaml

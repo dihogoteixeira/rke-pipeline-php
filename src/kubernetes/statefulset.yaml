@@ -1,0 +1,37 @@
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: ${CICD_IMAGE}
+  namespace: default
+  labels:
+    app: ${CICD_IMAGE}
+    version: v1
+spec:
+  serviceName: ${CICD_IMAGE}
+  replicas: 2
+  selector:
+    matchLabels:
+      app: ${CICD_IMAGE}
+      version: v1
+  template:
+    metadata:
+      labels:
+        app: ${CICD_IMAGE}
+        version: v1
+    spec:
+      topologySpreadConstraints:
+        - maxSkew: 1
+          topologyKey: kubernetes.io/hostname
+          whenUnsatisfiable: DoNotSchedule
+          labelSelector:
+            matchLabels:
+              app: ${CICD_IMAGE}
+              version: v1
+      serviceAccountName: ${CICD_IMAGE}
+      containers:
+        - name: ${CICD_IMAGE}
+          image: ${CICD_IMAGE}:${CICD_EXECUTION_SEQUENCE}
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 80  
