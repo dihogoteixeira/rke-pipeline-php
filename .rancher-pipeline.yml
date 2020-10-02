@@ -42,3 +42,8 @@ stages:
   steps:
   - applyYamlConfig:
       path: ./src/kubernetes/statefulset.yaml
+
+- name: Ingress
+  steps:
+  - applyYamlConfig:
+      path: ./src/kubernetes/ingress.yaml

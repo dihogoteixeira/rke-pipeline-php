@@ -2,11 +2,11 @@
 kind: Service
 apiVersion: v1
 metadata:
-  name: ${CICD_IMAGE}
+  name: ${CICD_IMAGE}-service
 spec:
   selector:
     app: ${CICD_IMAGE}
-  type: NodePort
+  type: ClusterIP
   ports:
     - protocol: TCP
       port: 80

@@ -6,19 +6,16 @@ metadata:
   namespace: default
   labels:
     app: ${CICD_IMAGE}
-    version: v1
 spec:
   serviceName: ${CICD_IMAGE}
-  replicas: 2
+  replicas: 3
   selector:
     matchLabels:
       app: ${CICD_IMAGE}
-      version: v1
   template:
     metadata:
       labels:
         app: ${CICD_IMAGE}
-        version: v1
     spec:
       topologySpreadConstraints:
         - maxSkew: 1
@@ -27,10 +24,10 @@ spec:
           labelSelector:
             matchLabels:
               app: ${CICD_IMAGE}
-              version: v1
       serviceAccountName: ${CICD_IMAGE}
       containers:
         - name: ${CICD_IMAGE}
+          # image: gcr.io/{{project}}/{{service}}:{{tag}}
           image: ${CICD_IMAGE}:${CICD_EXECUTION_SEQUENCE}
           imagePullPolicy: IfNotPresent
           ports:
