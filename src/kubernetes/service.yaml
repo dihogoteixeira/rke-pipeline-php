@@ -2,10 +2,10 @@
 kind: Service
 apiVersion: v1
 metadata:
-  name: php-example-service
+  name: ${CICD_IMAGE}
 spec:
   selector:
-    app: php-example
+    app: ${CICD_IMAGE}
   type: NodePort
   ports:
     - protocol: TCP
